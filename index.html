@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p><button>Share MDN!</button></p>
+    <p class="result"></p>
+    <script>
+      const btn = document.querySelector("button");
+      const fileObject=null;
+      btn.addEventListener("click", async () => {
+        if (navigator.share) {
+				const imgUrl = `https://www.ambitionbox.com/alpha/company/photos/logos/`;
+				const imgName = `tcs.jpg`;
+				fetch(`${imgUrl}${imgName}`,{mode:'cors',credentials: 'include'})
+					.then((response) => response.blob())
+					.then((blob) => {
+						fileObject = new window.File([blob], imgName, {
+							type: 'image/jpeg'
+						});
+						triggerNativeShare();
+					})
+					.catch((err) => {
+						console.error(err);
+						triggerNativeShare();
+					});
+			}
+      });
+      function triggerNativeShare() {
+			const fileArr = [fileObject];
+
+			const shareObj = {
+				title: `TCS: 60 Reviews & Ratings, 648 Interview`,
+				text: `Check out  profile, Interview questions, salaries, team size, office locations and much more.`,
+				url: `https://www.ambitionbox.com/overview/tcs-overview`
+			};
+
+			if (this.fileObject && navigator.canShare({ files: fileArr })) {
+				shareObj.files = fileArr;
+			}
+            console.log(shareObj);
+			navigator.share(shareObj).catch(() => {});
+		}
+    </script>
+  </body>
+</html>

@@ -11,9 +11,9 @@
     <p class="result"></p>
     <script>
       const btn = document.querySelector("button");
-      const fileObject=null;
+      var fileObject=null;
       btn.addEventListener("click", async () => {
-        if (navigator.share) {
+        // if (navigator.share) {
 				const imgUrl = `https://mridulk.github.io/nativeshare/`;
 				const imgName = `tcs.jpg`;
 				fetch(`${imgUrl}${imgName}`,{mode:'cors',credentials: 'include'})
@@ -28,7 +28,7 @@
 						console.error(err);
 						triggerNativeShare();
 					});
-			}
+			// }
       });
       function triggerNativeShare() {
 			const fileArr = [fileObject];

@@ -7,7 +7,7 @@
     <title>Document</title>
   </head>
   <body>
-    <p><button>Share Test</button></p>
+    <p><button>Share Test!</button></p>
     <p class="result"></p>
     <script>
       const btn = document.querySelector("button");
@@ -31,8 +31,8 @@
           const imgUrl = `https://mridulk.github.io/nativeshare/`;
           const imgName = `tcs.jpg`;
 		  
-          if (iOS()) triggerNativeShare();
-          else {
+        //   if (iOS()) triggerNativeShare();
+
             fetch(`${imgUrl}${imgName}`, {
               mode: "cors",
               credentials: "include",
@@ -48,7 +48,6 @@
                 console.error(err);
                 triggerNativeShare();
               });
-          }
         }
       });
       function triggerNativeShare() {

@@ -11,40 +11,61 @@
     <p class="result"></p>
     <script>
       const btn = document.querySelector("button");
-      var fileObject=null;
+      var fileObject = null;
+      function iOS() {
+        return (
+          [
+            "iPad Simulator",
+            "iPhone Simulator",
+            "iPod Simulator",
+            "iPad",
+            "iPhone",
+            "iPod",
+          ].includes(navigator.platform) ||
+          // iPad on iOS 13 detection
+          (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+        );
+      }
       btn.addEventListener("click", async () => {
         if (navigator.share) {
-				const imgUrl = `https://mridulk.github.io/nativeshare/`;
-				const imgName = `tcs.jpg`;
-				fetch(`${imgUrl}${imgName}`,{mode:'cors',credentials: 'include'})
-					.then((response) => response.blob())
-					.then((blob) => {
-						fileObject = new window.File([blob], imgName, {
-							type: 'image/jpeg'
-						});
-						triggerNativeShare();
-					})
-					.catch((err) => {
-						console.error(err);
-						triggerNativeShare();
-					});
-			}
+          const imgUrl = `https://mridulk.github.io/nativeshare/`;
+          const imgName = `tcs.jpg`;
+		  
+          if (iOS()) triggerNativeShare();
+          else {
+            fetch(`${imgUrl}${imgName}`, {
+              mode: "cors",
+              credentials: "include",
+            })
+              .then((response) => response.blob())
+              .then((blob) => {
+                fileObject = new window.File([blob], imgName, {
+                  type: "image/jpeg",
+                });
+                triggerNativeShare();
+              })
+              .catch((err) => {
+                console.error(err);
+                triggerNativeShare();
+              });
+          }
+        }
       });
       function triggerNativeShare() {
-			const fileArr = [fileObject];
+        const fileArr = [fileObject];
 
-			const shareObj = {
-				title: `TCS: 60 Reviews & Ratings, 648 Interview`,
-				text: `Check out  profile, Interview questions, salaries, team size, office locations and much more.`,
-				url: `https://www.ambitionbox.com/overview/tcs-overview`
-			};
+        const shareObj = {
+          title: `TCS: 60 Reviews & Ratings, 648 Interview`,
+          text: `Check out  profile, Interview questions, salaries, team size, office locations and much more.`,
+          url: `https://www.ambitionbox.com/overview/tcs-overview`,
+        };
 
-			if (this.fileObject && navigator.canShare({ files: fileArr })) {
-				shareObj.files = fileArr;
-			}
-            console.log(shareObj);
-			navigator.share(shareObj).catch(() => {});
-		}
+        if (this.fileObject && navigator.canShare({ files: fileArr })) {
+          shareObj.files = fileArr;
+        }
+        console.log(shareObj);
+        navigator.share(shareObj).catch(() => {});
+      }
     </script>
   </body>
 </html>
